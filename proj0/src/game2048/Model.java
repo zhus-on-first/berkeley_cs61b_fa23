@@ -130,8 +130,34 @@ public class Model {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        int boardSize = b.size();
 
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                // If a tile is null, a move is possible, so return true
+                if (b.tile(col, row) == null) {
+                    return true;
+                }
+
+                // If the current tile and the tile to the right have the same value, a move is possible, so return true
+                if (col != boardSize - 1) {
+                    Tile currentTile = b.tile(col, row);
+                    Tile rightTile = b.tile(col + 1, row);
+                    if (currentTile != null && rightTile != null && currentTile.value() == rightTile.value()) {
+                        return true;
+                    }
+                }
+
+                // If the current tile and the tile below have the same value, a move is possible, so return true
+                if (row != boardSize - 1) {
+                    Tile currentTile = b.tile(col, row);
+                    Tile belowTile = b.tile(col, row + 1);
+                    if (currentTile != null && belowTile != null && currentTile.value() == belowTile.value()) {
+                        return true;
+                    }
+                }
+            }
+        }
 
         return false;
     }

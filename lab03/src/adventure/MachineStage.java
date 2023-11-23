@@ -77,13 +77,17 @@ public class MachineStage implements AdventureStage {
         return responses;
     }
 
-    public static int mysteryMax(int a, int b) {
-        int w = (b - a) >> 31;
-        int z = ~(b - a) >> 31;
-
-        int max = b & w | a & z;
-        return max;
+//    public static int mysteryMax(int a, int b) {
+//        int w = (b - a) >> 31;
+//        int z = ~(b - a) >> 31;
+//
+//        int max = b & w | a & z;
+//        return max;
+//    }
+    public static int simplerMax(int a, int b) {
+        return Math.max(a, b);
     }
+
 
     public static int mysteryAdd(int a, int b) {
         int x = a, y = b;
@@ -112,7 +116,7 @@ public class MachineStage implements AdventureStage {
         }
         int[] returnArray = new int[a.length];
         for (int i = 0; i < a.length; i += 1) {
-            int biggerValue = mysteryMax(a[i], b[i]);
+            int biggerValue = simplerMax(a[i], b[i]);
             returnArray[i] = biggerValue;
         }
 
@@ -126,7 +130,8 @@ public class MachineStage implements AdventureStage {
         int i = 0;
         int sum = 0;
         while (i < x.length) {
-            sum = sum + mysteryAdd(sum, x[i]);
+//            sum = sum + mysteryAdd(sum, x[i]);
+            sum =  mysteryAdd(sum, x[i]);
             i = i + 1;
         }
         return sum;

@@ -17,7 +17,15 @@ public class BombMain {
             b.phase1(IntList.of(0, 9, 3, 0, 8)); // Figure this out too
         }
         if (phase >= 2) {
-            b.phase2("Figure this out. I wonder where the phases are defined...");
+            StringBuilder password = new StringBuilder();
+            for (int i = 0; i < 100001; i++) {
+                if (i == 1337) {
+                    password.append(Integer.toString(-81201430));
+                } else {
+                    password.append(" ");
+                }
+            }
+            b.phase2(password.toString());
         }
     }
 }

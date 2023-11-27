@@ -2,16 +2,16 @@ import java.util.List;
 
 public class LinkedListDeque<T> implements Deque<T> {
     // Instance variables
-    private intNode sentinel;
+    private Node sentinel;
     private int size;
     // Node class
-    private class intNode {
+    private class Node {
         public T item;
-        public intNode prev;
-        public intNode next;
+        public Node prev;
+        public Node next;
 
         // Constructor for new Node
-        public intNode (T i, intNode p, intNode n){
+        public Node (T i, Node p, Node n){
             item = i;
             prev = p;
             next = n;
@@ -21,7 +21,7 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     // Constructor to initialize empty deque with circular sentinel
     public LinkedListDeque() {
-        sentinel = new intNode(null, null, null);
+        sentinel = new Node(null, null, null);
         sentinel.prev = sentinel;
         sentinel.next = sentinel;
         size = 0;

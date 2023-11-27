@@ -23,7 +23,7 @@ public class LinkedListDequeTest {
      }
 
      @Test
-     /** In this test, we have three different assert statements that verify that addFirst works correctly. */
+     /* In this test, we have three different assert statements that verify that addFirst works correctly. */
      public void addFirstTestBasic() {
          Deque<String> lld1 = new LinkedListDeque<>();
 
@@ -43,7 +43,7 @@ public class LinkedListDequeTest {
      }
 
      @Test
-     /** In this test, we use only one assertThat statement. IMO this test is just as good as addFirstTestBasic.
+     /* In this test, we use only one assertThat statement. IMO this test is just as good as addFirstTestBasic.
       *  In other words, the tedious work of adding the extra assertThat statements isn't worth it. */
      public void addLastTestBasic() {
          Deque<String> lld1 = new LinkedListDeque<>();
@@ -54,21 +54,124 @@ public class LinkedListDequeTest {
          assertThat(lld1.toList()).containsExactly("front", "middle", "back").inOrder();
      }
 
-    // @Test
-    // /** This test performs interspersed addFirst and addLast calls. */
-    // public void addFirstAndAddLastTest() {
-    //     Deque<Integer> lld1 = new LinkedListDeque<>();
+     @Test
+     /* This test performs interspersed addFirst and addLast calls. */
+     public void addFirstAndAddLastTest() {
+         Deque<Integer> lld1 = new LinkedListDeque<>();
 
-    //     /* I've decided to add in comments the state after each call for the convenience of the
-    //        person reading this test. Some programmers might consider this excessively verbose. */
-    //     lld1.addLast(0);   // [0]
-    //     lld1.addLast(1);   // [0, 1]
-    //     lld1.addFirst(-1); // [-1, 0, 1]
-    //     lld1.addLast(2);   // [-1, 0, 1, 2]
-    //     lld1.addFirst(-2); // [-2, -1, 0, 1, 2]
+         /* I've decided to add in comments the state after each call for the convenience of the
+            person reading this test. Some programmers might consider this excessively verbose. */
+         lld1.addLast(0);   // [0]
+         lld1.addLast(1);   // [0, 1]
+         lld1.addFirst(-1); // [-1, 0, 1]
+         lld1.addLast(2);   // [-1, 0, 1, 2]
+         lld1.addFirst(-2); // [-2, -1, 0, 1, 2]
 
-    //     assertThat(lld1.toList()).containsExactly(-2, -1, 0, 1, 2).inOrder();
-    // }
+         assertThat(lld1.toList()).containsExactly(-2, -1, 0, 1, 2).inOrder();
+     }
 
     // Below, you'll write your own tests for LinkedListDeque.
+
+    /* This tests isEmpty with empty deque */
+    @Test
+    public void emptyDequeIsEmpty() {
+        // Arrange: Create empty deque
+        Deque<String> lld1 = new LinkedListDeque<>();
+
+        // Assert: check that deque is initially empty
+        assertThat(lld1.isEmpty()).isTrue();
+
+    }
+
+    /* This tests isEmpty after adding elements */
+    @Test
+    public void addElementIsNotEmpty() {
+        // Arrange: Create empty deque
+        Deque<String> lld1 = new LinkedListDeque<>();
+
+        // Act: add element
+        lld1.addFirst("test");
+
+        // Assert: Check that deque is no longer empty
+        assertThat(lld1.isEmpty()).isFalse();
+    }
+
+    /** This tests isEmpty by adding and then removing elements.
+     * In sequence of this lab, remove methods not available yet.
+     * TODO: Return to add these checks using remove methods */
+
+    /*
+    @Test
+    public void addAndRemoveIsEmpty() {
+        // Arrange: Create empty deque
+        Deque<String> lld1 = new LinkedListDeque<>();
+
+        // Act: add element
+        lld1.addFirst("test");
+        // Act: Remove added element.
+        lld1.removeFirst();
+
+        // Assert: Check that deque is empty again after removal
+        assertThat(lld1.isEmpty()).isTrue();
+    }
+*/
+
+    /** The following tests size() calls. */
+    @Test
+    public void emptyDequeSize() {
+        // Arrange: create empty deque
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+
+        // Assert: check that deque size is initially 0;
+        assertThat(lld1.size()).isEqualTo(0);
+
+    }
+
+    @Test
+    public void addElementsSize() {
+        // Arrange: create empty deque
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+
+        // Act: add element
+        lld1.addFirst(1);
+
+        // Assert: check size after adding 1 element
+        assertThat(lld1.size()).isEqualTo(1);
+
+        // Act: more elements
+        lld1.addLast(2);
+        lld1.addLast(3);
+
+        // Assert: check size after adding more elements
+        assertThat(lld1.size()).isEqualTo(3);
+
+    }
+    /** In sequence of this lab, remove methods not available yet.
+     * TODO: Return to add these checks using remove methods
+     * */
+//    @Test
+//    public void addElementsAndRemoveSize() {
+//        // Arrange: create empty deque
+//        Deque<Integer> lld1 = new LinkedListDeque<>();
+//
+//        // Act: add elements
+//        lld1.addLast(1);
+//        lld1.addLast(2);
+//        lld1.addLast(3);
+//
+//        // Act: remove an element
+////        lld1.removeLast();
+//
+//        // Assert: check size after moving one element
+////        assertThat(lld1.size()).isEqualTo(2);
+//
+//        // Act: remove all remaining elements
+////        lld1.removeLast();
+////        lld1.removeLast();
+//
+//        // Assert: check size after emoving all elements
+////        assertThat(lld1.size()).isEqualTo(0);
+//
+//    }
+
 }

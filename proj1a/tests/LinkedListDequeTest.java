@@ -1,9 +1,11 @@
 import jh61b.utils.Reflection;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Random;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
@@ -96,11 +98,7 @@ public class LinkedListDequeTest {
         assertThat(lld1.isEmpty()).isFalse();
     }
 
-    /** This tests isEmpty by adding and then removing elements.
-     * In sequence of this lab, remove methods not available yet.
-     * TODO: Return to add these checks using remove methods */
-
-    /*
+    /** This tests isEmpty by adding and then removing elements. */
     @Test
     public void addAndRemoveIsEmpty() {
         // Arrange: Create empty deque
@@ -114,7 +112,6 @@ public class LinkedListDequeTest {
         // Assert: Check that deque is empty again after removal
         assertThat(lld1.isEmpty()).isTrue();
     }
-*/
 
     /** The following tests size() calls. */
     @Test
@@ -146,32 +143,257 @@ public class LinkedListDequeTest {
         assertThat(lld1.size()).isEqualTo(3);
 
     }
-    /** In sequence of this lab, remove methods not available yet.
-     * TODO: Return to add these checks using remove methods
-     * */
-//    @Test
-//    public void addElementsAndRemoveSize() {
-//        // Arrange: create empty deque
-//        Deque<Integer> lld1 = new LinkedListDeque<>();
-//
-//        // Act: add elements
-//        lld1.addLast(1);
-//        lld1.addLast(2);
-//        lld1.addLast(3);
-//
-//        // Act: remove an element
-////        lld1.removeLast();
-//
-//        // Assert: check size after moving one element
-////        assertThat(lld1.size()).isEqualTo(2);
-//
-//        // Act: remove all remaining elements
-////        lld1.removeLast();
-////        lld1.removeLast();
-//
-//        // Assert: check size after emoving all elements
-////        assertThat(lld1.size()).isEqualTo(0);
-//
-//    }
+    @Test
+    public void addElementsAndRemoveSize() {
+        // Arrange: create empty deque
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+
+        // Act: add elements
+        lld1.addLast(1);
+        lld1.addLast(2);
+        lld1.addLast(3);
+
+        // Act: remove an element
+        lld1.removeLast();
+
+        // Assert: check size after moving one element
+        assertThat(lld1.size()).isEqualTo(2);
+
+        // Act: remove all remaining elements
+        lld1.removeLast();
+        lld1.removeLast();
+
+        // Assert: check size after removing all elements
+        assertThat(lld1.size()).isEqualTo(0);
+
+    }
+
+    /** Test case for get() of with empty deque */
+    @Test
+    public void testEmptyDequeInvalidArgumentGet() {
+        // Arrange: create empty deque
+        Deque<Character> lld1 = new LinkedListDeque<>();
+
+        // Assert: check that get with any index returns null in empty deque
+        assertThat(lld1.get(-1)).isNull();
+        assertThat(lld1.get(0)).isNull();
+        assertThat(lld1.get(2)).isNull();
+    }
+
+    /** Test case for get() of non-empty deque */
+    @Test
+    public void testNonEmptyDequeInvalidArgumentGet() {
+        // Arrange: create empty deque
+        Deque<Character> lld2 = new LinkedListDeque<>();
+
+        // Act: add some elements to deque
+        lld2.addLast('A');
+        lld2.addLast('B');
+        lld2.addLast('C');
+
+        // Assert: check that invalid index return null
+        assertThat(lld2.get(-1)).isNull(); // Negative index
+        assertThat(lld2.get(3)).isNull(); // index equal to or greater than size
+        assertThat(lld2.get(28723)).isNull(); // Out of bounds
+    }
+
+    /** Test case for get() with non-empty deque with valid index */
+    @Test
+    public void testNonEmptyListValidArgumentGet() {
+        // Arrange: create empty deque
+        Deque<Integer> lld3 = new LinkedListDeque<>();
+
+        // Act: add elements
+        lld3.addFirst(10);
+        lld3.addLast(15);
+        lld3.addFirst(5);
+
+        // Assert: check valid index returns expected element
+        assertThat(lld3.get(0)).isEqualTo(5);
+        assertThat(lld3.get(1)).isEqualTo(10);
+        assertThat(lld3.get(2)).isEqualTo(15);
+
+    }
+
+    /** Check that removeFirst works */
+    @Test
+    @Tag("remove_first")
+    public void testRemoveFirst() {
+        // Arrange: create empty deque
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+
+        // Act: call removeFirst on empty deque
+        Integer removedElement = lld1.removeFirst();
+
+        // Assert: check that result is null or what is appropriate
+        assertThat(removedElement).isNull();
+        assertThat(lld1.toList()).isEmpty();
+
+    }
+
+    /** Add one element. Check that removeFirst works */
+    @Test
+    public void testAddAnElementRemoveFirst() {
+        // Arrange: create empty deque
+        Deque<Integer> lld2 = new LinkedListDeque<>();
+
+        // Act: add and call removeFirst
+        lld2.addFirst(1);
+        Integer removedElement = lld2.removeFirst();
+
+        // Assert: check that result is null or what is appropriate
+        assertThat(removedElement).isEqualTo(1);
+        assertThat(lld2.toList()).isEmpty();
+
+    }
+
+    /** Add multiple elements. Check that removeFirst works */
+    @Test
+    public void testAddElementsRemoveFirst() {
+        // Arrange: create empty deque
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+
+        // Act: add and call removeFirst
+        lld1.addLast(0);   // [0]
+        lld1.addLast(1);   // [0, 1]
+        lld1.addFirst(-1); // [-1, 0, 1]
+        lld1.addLast(2);   // [-1, 0, 1, 2]
+        lld1.addFirst(-2); // [-2, -1, 0, 1, 2]
+        lld1.removeFirst();
+
+        // Assert: check that result is [-1, 0, 1, 2]
+        assertThat(lld1.toList()).containsExactly(-1, 0, 1, 2).inOrder();
+    }
+
+
+    /** Add elements and remove almost all of them.
+     * Check removing last element with removeFirst. */
+    @Test
+    @Tag("remove_first_to_empty")
+    public void testAddElementsRemoveFirstToEmpty() {
+        // Arrange: create empty deque
+        Deque<Integer> lld3 = new LinkedListDeque<>();
+
+        // Act: add elements and remove all but last one
+        lld3.addLast(0);   // [0]
+        lld3.addLast(1);   // [0, 1]
+        lld3.addFirst(-1); // [-1, 0, 1]
+        lld3.addLast(2);   // [-1, 0, 1, 2]
+        lld3.addFirst(-2); // [-2, -1, 0, 1, 2]
+        while (!lld3.isEmpty()) {
+            lld3.removeFirst(); // []
+        }
+
+        // Assert: check that deque is now empty
+        assertThat(lld3.toList()).isEmpty();
+
+    }
+
+    /** Add some elements and remove almost all of them.
+     * Check removing second to last element with removeFirst. */
+    @Test
+    @Tag("remove_first_to_one")
+    public void testAddElementsRemoveFirstToOne() {
+        // Arrange: create empty deque
+        Deque<Integer> lld3 = new LinkedListDeque<>();
+
+        // Act: add elements and remove almost all.
+        lld3.addLast(0);   // [0]
+        lld3.addLast(1);   // [0, 1]
+        lld3.addFirst(-1); // [-1, 0, 1]
+        lld3.addLast(2);   // [-1, 0, 1, 2]
+        lld3.addFirst(-2); // [-2, -1, 0, 1, 2]
+        while (lld3.size() > 1) { // [1, 2]
+            lld3.removeFirst(); // [2]
+        }
+
+        // Assert: check that deque contains the last element
+        assertThat(lld3.toList()).containsExactly(2);
+    }
+
+    /** Check that removeLast works */
+    @Test
+    @Tag("remove_last")
+    public void testRemoveLast() {
+        // Arrange: create empty deque
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+
+        // Act: call removeLast on empty deque
+        lld1.removeLast();
+
+        // Assert: check that result is empty or what is appropriate
+        assertThat(lld1.toList()).isEmpty();
+    }
+
+    /** Add some elements and remove almost all of them.
+     * Check removing last element with removeLast will return empty/null deque. */
+    @Test
+    @Tag("remove_last_to_empty")
+    public void testAddElementsRemoveLastToEmpty() {
+        // Arrange: create empty deque
+        Deque<Integer> lld3 = new LinkedListDeque<>();
+
+        // Act: add elements and remove all but last one
+        Random random = new Random();
+
+        int elementsToAdd = random.nextInt(10);
+
+        for (int i = 0; i < elementsToAdd; i++) {
+            lld3.addLast(i);
+        }
+
+        while (!lld3.isEmpty()) {
+            lld3.removeLast();
+        }
+
+        // Assert: check that deque is now empty
+        assertThat(lld3.toList()).isEmpty();
+
+    }
+
+    /** Add some elements and remove almost all of them.
+     * Check removing second to last element with removeLast. */
+    @Test
+    @Tag("remove_last_to_one")
+    public void testAddElementsRemoveLastToOne() {
+        // Arrange: create empty deque
+        Deque<Float> lld3 = new LinkedListDeque<>();
+
+        // Act: add elements and remove all but last one
+        Random random = new Random();
+        int numberOfElementsToAdd = random.nextInt(11);
+        for (int i = 0; i < numberOfElementsToAdd; i++) {
+            int randomInt = random.nextInt(31) - 15; // Generate random integer between -15 and 15
+            float randomFloat = (float) randomInt;
+            lld3.addLast(randomFloat);
+        }
+
+        while (lld3.size() > 1) {
+            lld3.removeLast();
+        }
+
+        // Assert: check that deque has 1 element left
+        assertThat(lld3.toList()).hasSize(1);
+
+    }
+
+    @Test
+    /* This test performs interspersed removeFirst and removeLast calls. */
+    public void testRemoveFirstAndRemoveLast() {
+        Deque<Integer> lld1 = new LinkedListDeque<>();
+
+         /* I've decided to add in comments the state after each call for the convenience of the
+            person reading this test. Some programmers might consider this excessively verbose. */
+        lld1.addLast(0);   // [0]
+        lld1.addLast(1);   // [0, 1]
+        lld1.removeLast(); // [0]
+        lld1.addFirst(-1); // [-1, 0]
+        lld1.addLast(2);   // [-1, 0, 2]
+        lld1.addFirst(-2); // [-2, -1, 0, 2]
+        lld1.removeFirst(); // [-1, 0, 2]
+
+        assertThat(lld1.toList()).containsExactly(-1, 0, 2).inOrder();
+    }
+
 
 }

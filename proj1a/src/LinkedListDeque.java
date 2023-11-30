@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Implementation of a deque using a doubly-linked list with a sentinel node.
@@ -118,21 +119,74 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        return null;
+        // Remove the item at front/head of deque and return the resulting deque
+        if (isEmpty()) {
+            return null;
+//            throw new NoSuchElementException("Deque is empty");
+        }
+        // Store removed item
+        T removedItem = sentinel.next.item;
+
+        // Update sentinel next link to skip first item
+        sentinel.next = sentinel.next.next;
+
+        // update prev link of new first item (which we set to sentinel.next in line above) to sentinel
+        sentinel.next.prev = sentinel;
+        size--;
+        return removedItem;
     }
 
     @Override
     public T removeLast() {
-        return null;
+        if (isEmpty()) {
+            return null;
+//            throw new NoSuchElementException("Deque is empty");
+        }
+        // Store removed item
+        T removedItem = sentinel.prev.item;
+
+        // Update sentinel prev link to skip last item
+        sentinel.prev = sentinel.prev.prev;
+
+        // Update next link of new last item (which we set to sentinel.prev in live above) to sentinel
+        sentinel.prev.next = sentinel;
+        size--;
+        return removedItem;
+
     }
 
     @Override
     public T get(int index) {
-        return null;
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        Node current = sentinel.next;
+        for (int i = 0; i < index; i++) {
+            current = current.next;
+        }
+        return current.item;
     }
+
+//    @Override
+//    public T getRecursive(int index) {
+//        return null;
+//    }
 
     @Override
     public T getRecursive(int index) {
-        return null;
+        // Get the item at the given index recursively
+
+        return getRecursiveHelper(index, sentinel.next);
+
     }
+    private T getRecursiveHelper(int index, Node current) {
+        if (index == 0) {
+            return current.item;
+        }
+        if (current == sentinel) {
+            return null; // or throw an exception
+        }
+        return getRecursiveHelper(index - 1, current.next);
+    }
+
 }

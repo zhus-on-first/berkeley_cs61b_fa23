@@ -190,6 +190,31 @@ public class ArrayDequeTest {
         // Assert
         assertThat(ad1.get(-1)).isNull();
         assertThat(ad1.get(-244343)).isNull();
+    }
+
+    @Test
+    @DisplayName(" Check that size works on an empty deque.")
+    void testIsEmptyTrue() {
+        // Arrange: create an empty deque
+        Deque<Integer> ad1 = new ArrayDeque<>();
+
+        // Assert
+        assertThat(ad1.isEmpty()).isTrue();
+    }
+
+    @Test
+    @DisplayName(" Check that size works on an Non-empty deque.")
+    void testIsEmptyFalse() {
+        // Arrange: create an empty deque
+        Deque<Integer> ad1 = new ArrayDeque<>();
+
+        // Act: add elements
+        ad1.addFirst(1); // expect: [1]
+        ad1.addLast(2); // expect: [1, 2]
+        ad1.addLast(3); // expect: [1, 2, 3]
+
+        // Assert
+        assertThat(ad1.isEmpty()).isFalse();
 
     }
 

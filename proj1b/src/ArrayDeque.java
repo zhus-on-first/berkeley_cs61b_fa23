@@ -212,8 +212,16 @@ public class ArrayDeque<T> implements Deque<T> {
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        return numberOfElements == 0;
     }
+
+//    public boolean isEmpty2() {
+//        if (numberOfElements == 0) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     /**
      * Returns the size of the deque. Does not alter the deque.
@@ -267,6 +275,6 @@ public class ArrayDeque<T> implements Deque<T> {
      */
     @Override
     public T getRecursive(int index) {
-        return null;
+        throw new UnsupportedOperationException("No need to implement getRecursive for proj 1b");
     }
 }

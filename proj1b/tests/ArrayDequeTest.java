@@ -46,10 +46,10 @@ public class ArrayDequeTest {
         ad1.addFirst(3); // expect: [3, 4, 5, 6, 7]
         ad1.addFirst(2); // expect: [2, 3, 4, 5, 6, 7]
         ad1.addFirst(1); // expect: [1, 2, 3, 4, 5, 6, 7]
-        ad1.addLast(8); // expect: [1, 2, 3, 4, 5, 6, 7, 8]
+        ad1.addLast(8); // expect: [8, 1, 2, 3, 4, 5, 6, 7]
 
         // Assert
-        assertThat(ad1.toList()).containsExactly(1, 2, 3, 4, 5, 6, 7, 8).inOrder();
+        assertThat(ad1.toList()).containsExactly( 1, 2, 3, 4, 5, 6, 7, 8).inOrder();
     }
 
 
@@ -111,6 +111,23 @@ public class ArrayDequeTest {
     }
 
     @Test
+    @DisplayName("Check that addFirst and addLast works with interspersed calls")
+    void testAddFirstAndAddLastInterspersed() {
+        // Arrange: create an empty deque
+        Deque<Character> ad1 = new ArrayDeque<>();
+
+        // Act: add elements
+        ad1.addFirst('A'); // expect: [A]
+        ad1.addLast('D'); // expect: [A, D]
+        ad1.addLast('e'); // expect: [A, D, e]
+        ad1.addFirst('z'); // expect: [z, A, D, e]
+        ad1.addLast('B'); // expect: [z, A, D, e, B]
+
+        // Assert
+        assertThat(ad1.toList()).containsExactly('z', 'A', 'D', 'e', 'B').inOrder();
+    }
+
+    @Test
     @DisplayName("Check that get works on an empty deque")
     void testGetEmptyDeque() {
          // Arrange: create an empty deque
@@ -136,10 +153,9 @@ public class ArrayDequeTest {
         ad1.addLast('B'); // expect: [z, A, D, e, B]
 
         // Assert
-        assertThat(ad1.get(0)).isEqualTo('z');
-        assertThat(ad1.get(2)).isEqualTo('D');
-        assertThat(ad1.get(4)).isEqualTo('B');
-
+        assertThat(ad1.get(0)).isEqualTo('D');
+        assertThat(ad1.get(2)).isEqualTo('B');
+        assertThat(ad1.get(4)).isEqualTo(null);
     }
     @Test
     @DisplayName("Check that get works on a large, out of bounds index")

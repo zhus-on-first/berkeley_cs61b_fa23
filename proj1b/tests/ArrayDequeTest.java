@@ -39,7 +39,6 @@ public class ArrayDequeTest {
         Deque<Integer> ad1 = new ArrayDeque<>();
 
         // Act: add elements
-
         ad1.addFirst(7); // expect: [7]
         ad1.addFirst(6); // expect: [6, 7]
         ad1.addFirst(5); // expect: [5, 6, 7]
@@ -386,6 +385,7 @@ public class ArrayDequeTest {
         // Arrange: create empty deque
         Deque<Integer> ad1 = new ArrayDeque<>();
 
+        // Act
         /* I've decided to add in comments the state after each call for the convenience of the
             person reading this test. Some programmers might consider this excessively verbose. */
         ad1.addLast(0);   // [0]
@@ -396,6 +396,7 @@ public class ArrayDequeTest {
         ad1.addFirst(-2); // [-2, -1, 0, 2]
         ad1.removeFirst(); // [-1, 0, 2]
 
+        // Assert
         assertThat(ad1.toList()).containsExactly(-1, 0, 2).inOrder();
     }
 
@@ -403,17 +404,79 @@ public class ArrayDequeTest {
      * Fours test below consider resize
      */
     @Test
-    @DisplayName("Check that addFirst works when called on a full underlying array")
+    @DisplayName("Check addFirst works when called on a full underlying array")
     void testAddFirstTriggerResize() {
         // Arrange: create empty deque
         Deque<Integer> ad1 = new ArrayDeque<>();
+
+        // Act: add elements 9 elements
+        ad1.addFirst(7); // expect: [7]
+        ad1.addFirst(6); // expect: [6, 7]
+        ad1.addFirst(5); // expect: [5, 6, 7]
+        ad1.addFirst(4); // expect: [4, 5, 6 ,7]
+        ad1.addFirst(3); // expect: [3, 4, 5, 6, 7]
+        ad1.addFirst(2); // expect: [2, 3, 4, 5, 6, 7]
+        ad1.addFirst(1); // expect: [1, 2, 3, 4, 5, 6, 7]
+        ad1.addFirst(8); // expect: [8 (head), 1, 2, 3, 4, 5, 6, 7]
+        ad1.addFirst(9); // expect doubled and copied: [8, 1, 2, 3, 4, 5, 6, 7, null, null, null, null, null, null, null, 9(new head)]
+
+        // Assert
+        assertThat(ad1.toList()).containsExactly( 9, 8, 1, 2, 3, 4, 5, 6, 7).inOrder();
+        assertThat(ad1.size()).isEqualTo(9);
+
+        // Act: add more elements
+        ad1.addFirst(10); // expect: [10, 9, 7, 8, 1, 2, 3, 4, 5, 6]
+        ad1.addFirst(11); // expect: [11, 10, 9, 7, 8, 1, 2, 3, 4, 5, 6]
+
+        // Assert
+        assertThat(ad1.toList()).containsExactly(11, 10, 9, 8, 1, 2, 3, 4, 5, 6, 7).inOrder();
+        assertThat(ad1.size()).isEqualTo(11);
     }
 
     @Test
-    @DisplayName("Check that addLast works when called on a full underlying array")
+    @DisplayName("Check addLast works when called on a full underlying array")
     void testAddLastTriggerResize() {
         // Arrange: create empty deque
         Deque<Integer> ad1 = new ArrayDeque<>();
+
+        // Act: add elements to trigger resize
+        ad1.addLast(1); // expect: [1]
+        ad1.addLast(2); // expect: [1, 2]
+        ad1.addLast(3); // expect: [1, 2, 3]
+        ad1.addLast(4); // expect: [1, 2, 3, 4]
+        ad1.addLast(5); // expect: [1, 2, 3, 4, 5]
+        ad1.addLast(6); // expect: [1, 2, 3, 4, 5, 6]
+        ad1.addLast(7); // expect: [1, 2, 3, 4, 5, 6, 7]
+        ad1.addLast(8); // expect: [1, 2, 3, 4, 5, 6, 7, 8]
+        ad1.addLast(9); // expect resize and add: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+        // Assert
+        assertThat(ad1.toList()).containsExactly(1, 2, 3, 4, 5, 6, 7, 8, 9).inOrder();
+    }
+
+    @Test
+    @DisplayName("Interspersed addFirst and addLast works when called on a full underlying array")
+    void testInterspersedAddFirstAndAddLastTriggerResize() {
+        // Arrange: create empty deque
+        Deque<Integer> ad1 = new ArrayDeque<>();
+
+        // Act: add elements 9 elements
+        ad1.addFirst(7); // expect: [7]
+        ad1.addFirst(6); // expect: [6, 7]
+        ad1.addFirst(5); // expect: [5, 6, 7]
+        ad1.addFirst(4); // expect: [4, 5, 6 ,7]
+        ad1.addFirst(3); // expect: [3, 4, 5, 6, 7]
+        ad1.addFirst(2); // expect: [2, 3, 4, 5, 6, 7]
+        ad1.addFirst(1); // expect: [1, 2, 3, 4, 5, 6, 7]
+        ad1.addLast(8); // expect: [8, 1 (tail and head index), 2, 3, 4, 5, 6, 7]
+        ad1.addLast(9); // expect doubled and copied: [1 (start copying at old array head), 2, 3, 4, 5, 6, 7, 8, 9, null, null, null, null, null]
+
+        // Assert
+        assertThat(ad1.toList()).containsExactly( 1, 2, 3, 4, 5, 6, 7, 8, 9).inOrder();
+
+//        // Act: add some more elements
+//        ad1.addFirst(10);
+//        ad1.addLast();
 
     }
     @Test

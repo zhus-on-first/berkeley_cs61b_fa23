@@ -51,13 +51,6 @@ public class ArrayDeque<T> implements Deque<T> {
 
     }
 
-    /**
-     * Resizes the backing array to the target capacity.
-     * TODO: WORK ON RESIZING AFTER ALL METHODS WORK WITH FIXED-SIZE ARRAY FIRST.
-     */
-//    private void resize(int capacity) {
-//        int[] a = (T[]) new Object(capacity);
-//    }
 
     /**
      * Add an item to the front of the deque. Assumes the item is never null.
@@ -79,10 +72,32 @@ public class ArrayDeque<T> implements Deque<T> {
 //        numberOfElements += 1;
 //    }
 
+    /**
+     * Resizes the backing array to the target capacity.
+     */
+    private void resize(int capacity) {
+        // Create new array with calculated target capacity
+        T[] newItems = (T[]) new Object[capacity];
+
+        // Copy elements starting from headIndex
+        for (int i = 0; i < numberOfElements; i++) {
+            newItems[i] = items[(headIndex + i) % items.length];
+        }
+
+        // Update instance variables
+        items = newItems; // Reassign items reference to new array
+        headIndex = 0;
+        tailIndex = numberOfElements;
+
+    }
     @Override
     public void addFirst(T x) {
+        if (numberOfElements == items.length) {
+            // Create new array with double capacity
+            resize(numberOfElements * 2);
+        }
         // Update headIndex
-       headIndex = (headIndex - 1 + items.length) % items.length;
+        headIndex = (headIndex - 1 + items.length) % items.length;
 
         // Add the new item to the updated head index
         items[headIndex] = x;
@@ -110,6 +125,11 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public void addLast(T x) {
+        if (numberOfElements == items.length) {
+            // Create new array with double capacity
+            resize(numberOfElements * 2);
+        }
+
         // Update tailIndex
         int newIndex = tailIndex;
 

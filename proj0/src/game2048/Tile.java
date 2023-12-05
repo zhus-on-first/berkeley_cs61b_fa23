@@ -5,6 +5,8 @@ package game2048;
  */
 public class Tile {
 
+    private boolean hasMerged;
+
     /** A new tile with VALUE as its value at (ROW, COL).  This
      *  constructor is private, so all tiles are created by the
      *  factory method create. */
@@ -13,6 +15,17 @@ public class Tile {
         this._row = row;
         this._col = col;
         this._next = null;
+        this.hasMerged = false;
+    }
+
+    /** Returns whether the tile has merged. */
+    public boolean hasMerged() {
+        return hasMerged;
+    }
+
+    /** Sets the hasMerged property. */
+    public void setHasMerged(boolean hasMerged) {
+        this.hasMerged = hasMerged;
     }
 
     /** Return my current row. */

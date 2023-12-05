@@ -2,7 +2,6 @@ package game2048;
 
 import java.util.Formatter;
 
-
 /** The state of a game of 2048.
  *  @author P. N. Hilfinger + Josh Hug
  */
@@ -174,14 +173,67 @@ public class Model {
      *    value, then the leading two tiles in the direction of motion merge,
      *    and the trailing tile does not.
      * */
-    public void tilt(Side side) {
-        // TODO: Modify this.board (and if applicable, this.score) to account
-        // for the tilt to the Side SIDE.
 
+
+    // TODO: Modify this.board (and if applicable, this.score) to account
+    // for the tilt to the Side SIDE.
+    public void tilt(Side side) {
+        board.setViewingPerspective(side);
+
+        for (int col = 0; col < board.size(); col++) {
+            processColumn(col);
+        }
+
+        board.setViewingPerspective(Side.NORTH); // Reset perspective
 
         checkGameOver();
     }
 
+    private void processColumn(int col) {
+        // For each row from top to bottom
+        for (int row = board.size() - 1; row >= 0; row--) {
+        // For each row from bottom to top
+//        for (int row = 0; row < board.size(); row++) {
+            Tile currentTile = board.tile(col, row);
+            if (currentTile != null && !currentTile.hasMerged()) {
+                int finalRow = calculateFinalRow(currentTile, col, row);
+
+                if (finalRow != row) {
+                    if (board.move(col, finalRow, currentTile)) {
+                        currentTile.setHasMerged(true);
+                        updateScore(currentTile);
+                    }
+                }
+            }
+        }
+        // Reset the hasMerged property for all tiles after processing the column
+        for (int row = 0; row < board.size(); row++) {
+            Tile tile = board.tile(col, row);
+            if (tile != null) {
+                tile.setHasMerged(false);
+            }
+        }
+
+    }
+
+    private int calculateFinalRow(Tile tile, int col, int currentRow) {
+        // Iterate from the currentRow up
+        for (int row = currentRow + 1; row < board.size(); row++) {
+        //Iterate from the currentRow down
+//        for (int row = currentRow - 1; row > 0; row--) {
+            Tile aboveTile = board.tile(col, row);
+            if (aboveTile == null || (tile.value() == aboveTile.value() && !aboveTile.hasMerged())) {
+                return row;
+            }
+        }
+        return currentRow;
+    }
+
+
+    private void updateScore(Tile tile) {
+        // Logic for score based on the tile's value:
+        score += tile.value();
+    }
 
     @Override
     public String toString() {

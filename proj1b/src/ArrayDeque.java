@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 // index:   0 1 2 3 4 5 6 7
 // items: [-9 1 3 4 0 0 0 0]
@@ -230,7 +231,7 @@ public class ArrayDeque<T> implements Deque<T> {
      */
     @Override
     public int size() {
-        return 0;
+        return numberOfElements;
     }
 
     /**
@@ -240,7 +241,24 @@ public class ArrayDeque<T> implements Deque<T> {
      */
     @Override
     public T removeFirst() {
-        return null;
+        if (isEmpty()) {
+            return null;
+//            throw new NoSuchElementException("Deque is empty");
+        }
+        // Store removed item
+        T removedItem = items[headIndex];
+
+        // Optional: set headIndex to null for garbage
+        items[headIndex] = null;
+
+        // Update headIndex to next element
+        headIndex = (headIndex + 1) % items.length;
+
+        // Update number of elements
+        numberOfElements--;
+
+        return removedItem;
+
     }
 
     /**
@@ -250,7 +268,23 @@ public class ArrayDeque<T> implements Deque<T> {
      */
     @Override
     public T removeLast() {
-        return null;
+        if (isEmpty()) {
+            return null;
+//            throw new NoSuchElementException("Deque is empty");
+        }
+        // Store removed item
+        T removedItem = items[(tailIndex - 1 + items.length) % items.length];
+
+        // Optional: set tailIndex to null for garbage
+        items[(tailIndex - 1 + items.length) % items.length] = null;
+
+        // Update tailIndex to next element
+        tailIndex = (tailIndex - 1 + items.length) % items.length;
+
+        // Update number of elements
+        numberOfElements--;
+
+        return removedItem;
     }
 
     /**

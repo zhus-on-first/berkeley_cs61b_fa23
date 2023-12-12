@@ -47,4 +47,24 @@ public class ArrayDequeTest {
         assertFalse(iterator.hasNext());
     }
 
+    @Test
+    @DisplayName("Check equals method")
+    public void testEqualDeques() {
+        // Arrange
+        Deque<String> ad1 = new ArrayDeque<>();
+        Deque<String> ad2 = new ArrayDeque<>();
+
+        // Act
+        ad1.addLast("front");
+        ad1.addLast("middle");
+        ad1.addLast("back");
+
+        ad2.addLast("front");
+        ad2.addLast("middle");
+        ad2.addLast("back");
+
+        // Assert
+        assertThat(ad1).isEqualTo(ad2);
+    }
+
 }

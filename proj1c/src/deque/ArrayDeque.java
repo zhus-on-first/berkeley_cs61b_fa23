@@ -1,6 +1,7 @@
 package deque;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 // index:   0 1 2 3 4 5 6 7
@@ -52,13 +53,83 @@ public class ArrayDeque<T> implements Deque<T> {
 
     }
 
+    /** Returns an iterator */
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int index;
+        public ArrayDequeIterator() {
+           index = 0;
+        }
+
+        @Override
+        public boolean hasNext(){
+            return index < numberOfElements;
+        }
+        @Override
+        public T next() {
+
+            // Calculate actual index
+            int actualIndex = (headIndex + index) % items.length;
+
+            // Get item at actual index
+            T returnItem = items[actualIndex];
+
+            // Move to next index
+            index += 1;
+
+            return returnItem;
+        }
+    }
+    /**
+     * Returns true if this map contains a mapping for the specified key.
+     */
+    public boolean contains(Object x) {
+        for (int i = 0; i < numberOfElements; i++) {
+            if (items[i].equals(x)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Equals method to check items of two array deques. Overrides the default boolean equal method of the class.
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null) {
+            return false;
+        }
+        if (other instanceof ArrayDeque<?> otherDeque) {
+            // Check deque are of same size
+            if (this.numberOfElements != otherDeque.numberOfElements) {
+                return false;
+            }
+            // Check that all of MY items are in the other array deque
+            for (T x : this) {
+                if (!otherDeque.contains(x)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        // Other deque is not an array deque, so return false
+        return false;
+    }
+
 
     /**
      * Add an item to the front of the deque. Assumes the item is never null.
      *
      * @param x item to add
      */
-
     @Override
     public void addFirst(T x) {
         if (numberOfElements == items.length) {
@@ -155,14 +226,6 @@ public class ArrayDeque<T> implements Deque<T> {
         return numberOfElements == 0;
     }
 
-//    public boolean isEmpty2() {
-//        if (numberOfElements == 0) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-
     /**
      * Returns the size of the deque. Does not alter the deque.
      *
@@ -251,4 +314,3 @@ public class ArrayDeque<T> implements Deque<T> {
         throw new UnsupportedOperationException("No need to implement getRecursive for proj 1b");
     }
 }
-

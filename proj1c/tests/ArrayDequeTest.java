@@ -67,4 +67,17 @@ public class ArrayDequeTest {
         assertThat(ad1).isEqualTo(ad2);
     }
 
+    @Test
+    @DisplayName("Check toString method")
+    public void testToString() {
+        // Arrange
+        Deque<String> ad1 = new ArrayDeque<>();
+
+        ad1.addLast("front");
+        ad1.addLast("middle");
+        ad1.addLast("back");
+
+        System.out.println(ad1);
+    }
+
 }

@@ -1,8 +1,8 @@
 package deque;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Iterator;
 
 // index:   0 1 2 3 4 5 6 7
 // items: [-9 1 3 4 0 0 0 0]
@@ -124,6 +124,14 @@ public class ArrayDeque<T> implements Deque<T> {
         return false;
     }
 
+    /**
+     * toString method that returns string itself instead of memory location
+     *
+     */
+    @Override
+    public String toString() {
+        return toList().toString();
+    }
 
     /**
      * Add an item to the front of the deque. Assumes the item is never null.

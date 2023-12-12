@@ -8,6 +8,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
 public class MaxArrayDequeTest {
+
     @Test
     @DisplayName("Check that a MaxArrayDeque can be created with a comparator")
     public void testMaxArrayDequeBasic() {
@@ -58,7 +59,7 @@ public class MaxArrayDequeTest {
     public void testMaxWithCustomComparator() {
         // Arrange
         Comparator<Integer> reverseComparator = (a, b) -> b - a;
-        MaxArrayDeque<Integer> ad = new MaxArrayDeque<>(comparator);
+        MaxArrayDeque<Integer> ad = new MaxArrayDeque<>(reverseComparator);
 
         // Act
         ad.addLast(3); // 3

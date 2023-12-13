@@ -44,6 +44,12 @@ public class GuitarString {
         //       are different from each other. It means you should repeatedly call
         //       Math.random() - 0.5 to generate new random numbers for each array index.
 
+        // Deque everything in buffer and replace with random number
+        for (int i = 0; i < capacity; i++) {
+            buffer.removeFirst();
+            double r = Math.random() - 0.5;
+            buffer.addFirst(r);
+        }
 
     }
 

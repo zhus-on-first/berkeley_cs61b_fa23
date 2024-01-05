@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class UnionFind {
     /**
      * DO NOT DELETE OR MODIFY THIS, OTHERWISE THE TESTS WILL NOT PASS.
@@ -10,6 +12,8 @@ public class UnionFind {
        items are in disjoint sets. */
     public UnionFind(int N) {
         // TODO: YOUR CODE HERE
+        this.data = new int[N];
+        Arrays.fill(this.data, -1);
     }
 
     /* Returns the size of the set V belongs to. */

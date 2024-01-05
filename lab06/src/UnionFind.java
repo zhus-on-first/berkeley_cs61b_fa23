@@ -40,7 +40,16 @@ public class UnionFind {
        function, throw an IllegalArgumentException. */
     public int find(int v) {
         // TODO: YOUR CODE HERE
-        return -1;
+        if (v < 0 || v >= data.length) {
+            throw new IllegalArgumentException("Index " + v + " is not between 0 and " + (data.length-1));
+        }
+        if (data[v] < 0 ) {
+            return v; // v is root
+        } else {
+            int result = find(data[v]);
+            data[v] = result; // path compression: update v's parent to the set's root
+            return result;
+        }
     }
 
     /* Connects two items V1 and V2 together by connecting their respective

@@ -83,6 +83,48 @@ public class UnionFindTest {
     /**
      * Write your own tests below here to verify for correctness. The given tests are not comprehensive.
      */
+    @Test
+    public void testSizeOfWithSingleElementSet() {
+        // Arrange
+        UnionFind uf = new UnionFind(4);
+
+        // Act
+
+        // Assert
+        assertThat(uf.sizeOf(0).isEqualTo(1));
+
+    }
+    @Test
+    public void testSizeOfWithUnionedElements() {
+        // Arrange
+        UnionFind uf = new UnionFind(4);
+
+        // Act
+        uf.union(0, 1);
+
+        // Assert
+        assertThat(sizeOf(0)).isEqualTo(2);
+        assertThat(sizeOf(1)).isEqualTo(2);
+    }
+    @Test
+    public void testSizeOfWithLargeSetOfUnionedElements() {
+        // Arrange
+        UnionFind uf = new UnionFind(4);
+
+        // Act
+        uf.union(0, 1);
+        uf.union(2, 3);
+        uf.union(0, 2);
+        uf.union(4, 5);
+        uf.union(6, 7);
+        uf.union(8, 9);
+        uf.union(4, 8);
+        uf.union(4, 6);
+
+        // Assert
+        assertThat(sizeOf(0)).isEqualTo(??);
+        assertThat(sizeOf(6)).isEqualTo(??);
+    }
 
 }
 

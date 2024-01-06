@@ -19,7 +19,7 @@ public class UnionFind {
     /* Returns the size of the set V belongs to. */
     public int sizeOf(int v) {
         // TODO: YOUR CODE HERE
-        return data.length;
+        return data[v];
     }
 
     /* Returns the parent of V. If V is the root of a tree, returns the
@@ -46,19 +46,42 @@ public class UnionFind {
         if (data[v] < 0 ) {
             return v; // v is root
         } else {
-            int result = find(data[v]);
-            data[v] = result; // path compression: update v's parent to the set's root
-            return result;
+            int root = find(data[v]);
+            data[v] = root; // path compression: update v's parent to the set's root
+            return root;
         }
     }
 
     /* Connects two items V1 and V2 together by connecting their respective
        sets. V1 and V2 can be any element, and a union-by-size heuristic is
-       used. If the sizes of the sets are equal, tie break by connecting V1's
-       root to V2's root. Union-ing a item with itself or items that are
+       used. If the sizes of the sets are equal, tie-break by connecting V1's
+       root to V2's root. Union-ing an item with itself or items that are
        already connected should not change the structure. */
     public void union(int v1, int v2) {
         // TODO: YOUR CODE HERE
+
+        // Special case: union(2, 2)--union with itself
+        if (v1 == v2) {
+            return;
+        }
+        // Identify root
+        int root1 = find(v1);
+        int root2 = find(v2);
+
+        // Special case: elements already in same set
+        if (root1 == root2) {
+            return; // do nothing
+        }
+
+        // Compare size by look at index of root and execute union
+//        if (data[rootV1] >= data[rootV2]) { // if v1 is smaller than v2, but needs >= between negative index
+        if (Math.abs(data[root1]) <= Math.abs(data[root2])) {
+            data[root1] = root2; // root2 is the new root
+            data[root2] = data[root2] + data[root1]; // update the size of the unioned set
+        } else {
+            data[root2] = root1;
+            data[root1] = data[root1] + data[root2]; // update the size of unioned set
+        }
     }
 
     /**

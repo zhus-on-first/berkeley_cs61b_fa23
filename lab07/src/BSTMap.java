@@ -1,7 +1,7 @@
 import java.util.Iterator;
 import java.util.Set;
 
-public class BSTMap< K, V extends Comparable<K> > implements Map61B<K, V> {
+public class BSTMap< K extends Comparable<K>, V > implements Map61B<K, V> {
 
     /** Keys and values are stored in a Map of Entry objects.
      *  This variable stores the first pair in this Map. */
@@ -34,7 +34,40 @@ public class BSTMap< K, V extends Comparable<K> > implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
+        if (root == null) {
+            root = new Entry(key, value);
+        } else {
+            root = putHelper(root, key, value); // Outsource to a helper
+        }
+    }
 
+    /**
+    * Helper function to traverse tree
+    */
+    private Entry putHelper(Entry node, K Key, V Value) {
+        // If current node is null, return new Entry object with key and value?
+        if (root == null) {
+            return new Entry (Key, Value);
+        }
+
+        // Initialize a compare of the new key with the current node's key
+        int compare = Key.compareTo(node.key);
+
+        // If key is less, go left
+        if (compare < 0) {
+            node.left = putHelper(node.left, Key, Value);
+        }
+
+        // If key is greater, go right
+        if (compare > 0) {
+            node.right = putHelper(node.right, Key, Value);
+        }
+
+        // If key is equal (found key you want), update value of current node
+        else {
+            node.value = value;
+        }
+        return node;
     }
 
     /**
@@ -80,7 +113,8 @@ public class BSTMap< K, V extends Comparable<K> > implements Map61B<K, V> {
      */
     @Override
     public Set<K> keySet() {
-        return null;
+//        return null;
+        throw new UnsupportedOperationException("Not implementing");
     }
 
     /**
@@ -93,7 +127,8 @@ public class BSTMap< K, V extends Comparable<K> > implements Map61B<K, V> {
      */
     @Override
     public V remove(K key) {
-        return null;
+//        return null;
+        throw new UnsupportedOperationException("Not implementing");
     }
 
     /**

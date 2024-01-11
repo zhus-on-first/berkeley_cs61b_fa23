@@ -44,23 +44,23 @@ public class BSTMap< K extends Comparable<K>, V > implements Map61B<K, V> {
     /**
     * Helper function to traverse tree
     */
-    private Entry putHelper(Entry node, K Key, V Value) {
+    private Entry putHelper(Entry node, K key, V value) {
         // If current node is null, return new Entry object with key and value?
-        if (root == null) {
-            return new Entry (Key, Value);
+        if (node == null) {
+            return new Entry (key, value);
         }
 
         // Initialize a compare of the new key with the current node's key
-        int compare = Key.compareTo(node.key);
+        int compare = key.compareTo(node.key);
 
         // If key is less, go left
         if (compare < 0) {
-            node.left = putHelper(node.left, Key, Value);
+            node.left = putHelper(node.left, key, value);
         }
 
         // If key is greater, go right
-        if (compare > 0) {
-            node.right = putHelper(node.right, Key, Value);
+        else if (compare > 0) {
+            node.right = putHelper(node.right, key, value);
         }
 
         // If key is equal (found key you want), update value of current node
@@ -78,6 +78,23 @@ public class BSTMap< K extends Comparable<K>, V > implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
+        // Start from the root
+        Entry node = root;
+
+        // Loop through the tree
+        while (node != null) {
+            // Compare the search key with the current node's key
+            int compare = key.compareTo(node.key);
+
+            if (compare < 0) { // If the search key is less than the current node's key
+                node = node.left;
+            } else if (compare > 0) { // If the search key is greater than the current node's key
+                node = node.right;
+            } else { // If you find the node with the key
+                return node.value;
+            }
+        }
+        // Return null if the key is not found
         return null;
     }
 

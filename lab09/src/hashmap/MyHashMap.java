@@ -182,7 +182,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         // Add new node to correct bucket
         bucket.add(newNode);
 
-        // track size and when to resize
+        // Update item count and check for resize
         numberOfItems++;
         resize();
     }
@@ -199,7 +199,14 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         // get bucket by indexing into the buckets array
         // if bucket contains given key, return key's value
         // else, return null
-        return null;
+
+        Collection<Node> bucket = getBucket(key);
+        for (Node node: bucket) { // for each node in the bucket with the requested key
+            if (node.key.equals(key)) { // if node with given key exists,
+                return node.value; // return node's value
+            }
+        }
+        return null; // If no node with the key is found, create new node
     }
 
     /**

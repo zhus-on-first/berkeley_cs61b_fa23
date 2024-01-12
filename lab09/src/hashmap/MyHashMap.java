@@ -2,6 +2,7 @@ package hashmap;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 
 /**
@@ -26,14 +27,37 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         }
     }
 
-    /* Instance Variables */
-    private Collection<Node>[] buckets;
-    // You should probably define some more!
+    /* Class-level Instance Variables */
+    private Collection<Node>[] buckets; // Don't change. Array of Collection<Node> objects
+    private int numberOfItems; // Track number of items/elements in the map
+    private int numberOfBuckets; // Track number of buckets
+    private double loadFactor;
+
 
     /** Constructors */
-    public MyHashMap() { }
+    public MyHashMap() {
+        numberOfItems = 0;
+        numberOfBuckets = 16;
+        loadFactor = 0.75;
 
-    public MyHashMap(int initialCapacity) { }
+        // Create buckets now instead of having put() create it later
+        buckets = (Collection<Node>[]) new Collection[numberOfBuckets];
+        for (int i = 0; i < numberOfBuckets; i++) {
+            buckets[i] = createBucket(); // Access and modify each item of array by index
+        }
+    }
+
+    public MyHashMap(int initialCapacity) {
+        numberOfItems = 0;
+        numberOfBuckets = initialCapacity;
+        loadFactor = 0.75;
+
+        // Create buckets now instead of having put() create it later
+        buckets = (Collection<Node>[]) new Collection[numberOfBuckets];
+        for (int i = 0; i < numberOfBuckets; i++) {
+            buckets[i] = createBucket(); // Access and modify each item of array by index
+        }
+    }
 
     /**
      * MyHashMap constructor that creates a backing array of initialCapacity.
@@ -42,7 +66,18 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param initialCapacity initial size of backing array
      * @param loadFactor maximum load factor
      */
-    public MyHashMap(int initialCapacity, double loadFactor) { }
+    public MyHashMap(int initialCapacity, double loadFactor) {
+        numberOfItems = 0;
+        numberOfBuckets = initialCapacity;
+        this.loadFactor = loadFactor;
+
+        // Create buckets now instead of having put() create it later
+        buckets = (Collection<Node>[]) new Collection[numberOfBuckets];
+        for (int i = 0; i < numberOfBuckets; i++) {
+            buckets[i] = createBucket(); // Access and modify each item of array by index
+        }
+
+    }
 
     /**
      * Returns a data structure to be a hash table bucket
@@ -63,11 +98,22 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * OWN BUCKET DATA STRUCTURES WITH THE NEW OPERATOR!
      */
     protected Collection<Node> createBucket() {
-        return null;
+        return new LinkedList<>();
     }
 
     // TODO: Implement the methods of the Map61B Interface below
     // Your code won't compile until you do so!
+
+    /**
+     * Helper function for these repeated steps in implementation:
+     *         // hash(key) -> index corresponding to a bucket to place it in
+     *         // get bucket by indexing into the buckets array
+     *         // if bucket contains given key,
+     * Returns ???
+     */
+    private helper() {
+        return null;
+    }
 
     /**
      * Associates the specified value with the specified key in this map.
@@ -122,7 +168,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public int size() {
-        return 0;
+        return numberOfBuckets;
     }
 
     /**
@@ -130,7 +176,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public void clear() {
-
+        numberOfBuckets = 0;
+        buckets = null;
     }
 
     /**

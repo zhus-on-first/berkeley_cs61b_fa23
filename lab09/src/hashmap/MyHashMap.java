@@ -139,16 +139,16 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
                 newBuckets[i] = createBucket(); // Access and modify each item of array by index
             }
 
-            // 3. Rehash items
+            // 3. Rehash items and add to new bucket array
             for (Collection<Node> bucket: buckets) { // Iterate over each bucket in old bucket array
-                for (Node node: bucket) { // for each item in old bucket
-                    int hash = key.hashCode(); // Calculate hash for the given key
-                    int newIndex = Math.floorMod(hash, newNumberOfBuckets); // Find bucket based on calculated hash
+                for (Node node: bucket) { // for each item(node) in each old bucket
+                    int hash = node.key.hashCode(); // Calculate hash for the given key (in the node)
+                    int newIndex = Math.floorMod(hash, newNumberOfBuckets); // Find new bucket based on calculated hash
                     newBuckets[newIndex].add(node); // Add node to correct bucket in newBuckets
                 }
             }
 
-            // 4. Replace old buckets array with this new one
+            // 4. Replace old buckets array with new one
             buckets = newBuckets;
             numberOfBuckets = newNumberOfBuckets;
         }
@@ -169,8 +169,22 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         // if bucket contains given key, update key's value
         // else, add a new Node<K, V> to bucket's collection
 
-        // track size and when to resize
+        Collection<Node> bucket = getBucket(key);
+        for (Node node: bucket) {
+            if (node.key.equals(key)) { // if node with given key exists. use equals() for value equality
+                node.value = value; // update node's value
+                return; // Exit loop
+            }
+        }
+        // If no node with the key is found, create new node
+        Node newNode = new Node(key, value);
 
+        // Add new node to correct bucket
+        bucket.add(newNode);
+
+        // track size and when to resize
+        numberOfItems++;
+        resize();
     }
 
     /**

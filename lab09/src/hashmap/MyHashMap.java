@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
+import static java.util.Objects.hash;
+
 /**
  *  A hash table-backed Map implementation.
  *
@@ -29,7 +31,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /* Class-level Instance Variables */
     private Collection<Node>[] buckets; // Don't change. Array of Collection<Node> objects
-    private int numberOfItems; // Track number of items/elements in the map
+    private int numberOfItems; // Track number of items(elements) in the map
     private int numberOfBuckets; // Track number of buckets
     private double loadFactor;
 
@@ -106,13 +108,50 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /**
      * Helper function for these repeated steps in implementation:
-     *         // hash(key) -> index corresponding to a bucket to place it in
-     *         // get bucket by indexing into the buckets array
-     *         // if bucket contains given key,
-     * Returns ???
+     *         // Calculating the hash for the key: hash(key) -> index corresponding to a bucket to place it in
+     *         // Finding the appropriate bucket based on this hash.
+     *         // Iterating over the buckets to find a node with the given key.
      */
-    private helper() {
-        return null;
+    private Collection<Node> getBucket(K key) {
+        // Calculate hash for the given key
+        int hash = key.hashCode();
+
+        // Find bucket based on calculated hash
+        int index = Math.floorMod(hash, numberOfBuckets);
+
+        // Return bucket at calculated index
+        return buckets[index];
+    }
+
+    /**
+     * Helper function: calculates loadFactor to determine resizing
+     * Returns ??
+     */
+    private void resize() {
+        double currentLoadFactor = (double) numberOfItems / numberOfBuckets;
+        if (currentLoadFactor >= loadFactor) {
+            // 1. Double bucket array size
+            int newNumberOfBuckets = numberOfBuckets * 2;
+
+            // 2. Create and initialize new, larger bucket array
+            Collection<Node>[] newBuckets = (Collection<Node>[]) new Collection[newNumberOfBuckets];
+            for (int i = 0; i < newNumberOfBuckets; i++) {
+                newBuckets[i] = createBucket(); // Access and modify each item of array by index
+            }
+
+            // 3. Rehash items
+            for (Collection<Node> bucket: buckets) { // Iterate over each bucket in old bucket array
+                for (Node node: bucket) { // for each item in old bucket
+                    int hash = key.hashCode(); // Calculate hash for the given key
+                    int newIndex = Math.floorMod(hash, newNumberOfBuckets); // Find bucket based on calculated hash
+                    newBuckets[newIndex].add(node); // Add node to correct bucket in newBuckets
+                }
+            }
+
+            // 4. Replace old buckets array with this new one
+            buckets = newBuckets;
+            numberOfBuckets = newNumberOfBuckets;
+        }
     }
 
     /**
@@ -168,7 +207,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public int size() {
-        return numberOfBuckets;
+        return numberOfItems;
     }
 
     /**
@@ -176,8 +215,15 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public void clear() {
-        numberOfBuckets = 0;
-        buckets = null;
+        // Reset items
+        numberOfItems = 0;
+
+        // Reinitialize buckets
+//        numberOfBuckets = 16; // Need this? Without will array size reset to what's set in constructors?
+        buckets = (Collection<Node>[]) new Collection[numberOfBuckets];
+        for (int i = 0; i < numberOfBuckets; i++) {
+            buckets[i] = createBucket(); // Access and modify each item of array by index
+        }
     }
 
     /**
